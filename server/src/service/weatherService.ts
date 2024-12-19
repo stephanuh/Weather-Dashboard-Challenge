@@ -49,8 +49,11 @@ class WeatherService {
 
   // TODO: Create fetchLocationData method
   private async fetchLocationData(query: string): Promise<any> {
+    this.city = query;
+    const url = this.buildGeocodeQuery();
+
     try {
-      const response = await fetch(query);
+      const response = await fetch(url);
       if (!response.ok){
         throw new Error(`fetching location data for ${response.status} not found`);
       }
@@ -82,21 +85,12 @@ class WeatherService {
   
   const queryLimit = 1;
     let query = `${this.baseURL}/geo/1.0/direct?q=${encodeURIComponent(this.city)}$limit=${queryLimit}&appid=${this.apiKey}`;
-    
-    //if(! this.isValidUrl(query)){
-      //throw new Error('Invalid URL');
-    
-      // }
     return query;
    }
   
-
-  // TODO: Create buildWeatherQuery method
+   // TODO: Create buildWeatherQuery method
   private buildWeatherQuery(coordinates: Coordinates): string {
     let query = `${this.baseURL}/data/2.5/forecast?units=imperial&lat=${coordinates.lat}&appid=${this.apiKey}`;
-    //if(! this.isValidUrl(query)){
-      //throw new Error('buildWeatherQuery():Invalid URL');
-   //}return query;
    return query;
   }
 
