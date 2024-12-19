@@ -1,18 +1,16 @@
 import { Router } from 'express';
 const router = Router();
-//import { Router, type Request, type Response } from 'express';??
+
 import HistoryService from '../../service/historyService.js';
 import WeatherService from '../../service/weatherService.js';
-//import historyService from '../../service/historyService.js';
-//DELETE^?
 
 // TODO: POST Request with city name to retrieve weather data
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
  // TODO: GET weather data from city name
  // TODO: save city to search history
 
   console.log(`{req.method} request received to retrieve weather data`);
-  //DELETE^? console.info??
+  
   const cityName = req.body.city;
   
   if(cityName) {
@@ -27,8 +25,6 @@ router.post('/', (req, res) => {
   }else{
     res.status(400).send('City name is required');
   }
-
-  
 });
 
 // TODO: GET search history
@@ -45,9 +41,11 @@ router.get('/history', async (req, res) => {
 // * BONUS TODO: DELETE city from search history
 router.delete('/history/:id', async (req, res) => {
   const cityId = req.params.id;
+
   console.log(`${req.method} request received to delete ${cityId} from search history`);
+
   if(cityId){
-    await HistoryService.removeCity(cityId);  //DELETE "removeCity"?
+    await HistoryService.removeCity(cityId);
     res.status(200).send('City removed successfully!');
   }else{
     res.status(400).send('City ID is required');

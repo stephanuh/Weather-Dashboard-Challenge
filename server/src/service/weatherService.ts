@@ -78,12 +78,15 @@ class WeatherService {
  };
 
   // TODO: Create buildGeocodeQuery method
-   private buildGeocodeQuery(): string {
-    const queryLimit = 1;
+   private buildGeocodeQuery(): string { 
+  
+  const queryLimit = 1;
     let query = `${this.baseURL}/geo/1.0/direct?q=${encodeURIComponent(this.city)}$limit=${queryLimit}&appid=${this.apiKey}`;
+    
     //if(! this.isValidUrl(query)){
       //throw new Error('Invalid URL');
-    //}
+    
+      // }
     return query;
    }
   
@@ -101,7 +104,7 @@ class WeatherService {
    private async fetchAndDestructureLocationData(query:string):Promise<Coordinates> {
     const locationData = await this.fetchLocationData(query);
     return this.destructureLocationData(locationData);
-   }//come back????
+   }
 
   // TODO: Create fetchWeatherData method
   private async fetchWeatherData(coordinates: Coordinates): Promise<any> {
@@ -113,7 +116,7 @@ class WeatherService {
     }
     const data = await response.json();
     return data;
-  }//come back????
+  }
 
   // TODO: Build parseCurrentWeather method
   private parseCurrentWeather(response: any):Weather {
@@ -163,15 +166,6 @@ class WeatherService {
     const weatherArray = this.buildForecastArray(weatherData.list);
     return weatherArray;
    }
-  //   try{
-  //     const coordinates = await this.fetchAndDestructureLocationData(city);
-  //     const weatherData = await this.fetchWeatherData(coordinates);
-  //     return this.buildForecastArray(weatherData);
-  //   } catch (error) {
-  //     console.error('Error getting weather data:');
-  //     throw error;
-  //   }
-  //  }
 }
 
 export default new WeatherService();
