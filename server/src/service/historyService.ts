@@ -42,7 +42,7 @@ class HistoryService {
     if (cities.some((city) => city.name.toLowerCase() === cityName.toLowerCase())){
       throw new Error('City already exists in the search history');
     }
-    const newCity = new City(cityName);
+    const newCity = new City(cityName, Date.now().toString()); //it worked???
     cities.push(newCity);
 
     await this.write(cities);
