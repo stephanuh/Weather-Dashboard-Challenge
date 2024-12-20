@@ -8,24 +8,34 @@ This application allows users to interact the dashboard and see weather outlook 
 
 ## Installation
 
+Install dependencies: ```npm start```
+
+Build the project: ```npm run build```
+
+create a ```.env``` file in the root directory with following variables:
+- API_BASE_URL= https://api.openweathermap.org
+- API_KEY = your_openweather_api_key
+
 
 ## Usage
 
-Provide instructions and examples for use. Include screenshots as needed.
+1) Open the application in your browser (if run locally `http://localhost:3001`)
 
-To add a screenshot, create an `assets/images` folder in your repository and upload your screenshot to it. Then, using the relative filepath, add it to your README using the following syntax:
+2) Enter city name in search bar.
 
-    ```md
-    ![alt text](assets/images/screenshot.png)
-    ```
+3) View current weather and 5-day forecast for the selected city.
+
+4) check the search history to revisit previosly searched cities.
+
+5) you can deleted your city history.
+
 
 ## Credits
 
-List your collaborators, if any, with links to their GitHub profiles.
+I was hard stuck on how can I receive an **API_KEY**. I followed the instructions [here](https://coding-boot-camp.github.io/full-stack/apis/how-to-use-api-keys) and was able to grab one.
 
-If you used any third-party assets that require attribution, list the creators with links to their primary web presence in this section.
+[Vite](https://vite.dev/) and [Render](https://render.com/) were also included in this application.
 
-If you followed tutorials, include links to those here as well.
 
 ## License
 
@@ -33,12 +43,10 @@ If you followed tutorials, include links to those here as well.
 
 ## Features
 
-If your project has a lot of features, list them here.
+- Search for weather by city.
+- View current weather conditions.
+- Display a 5 day weather forecast.
+- Save search history for quick access for past cities.
 
-## How to Contribute
 
-If you created an application or package and would like other developers to contribute it, you can include guidelines for how to do so. The [Contributor Covenant](https://www.contributor-covenant.org/) is an industry standard, but you can always write your own if you'd prefer.
 
-## Tests
-
-Go the extra mile and write tests for your application. Then provide examples on how to run them here.
