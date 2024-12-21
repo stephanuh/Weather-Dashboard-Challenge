@@ -22,9 +22,9 @@ router.post('/', async (req, res) => {
     }catch(error){
       res.status(500).send('Unable to retrieve weather data');
     }
-  }else{
-    res.status(400).send('City name is required');
-  }
+  }//else{
+    //res.status(400).send('City name is required');
+  //}
 });
 
 // TODO: GET search history
