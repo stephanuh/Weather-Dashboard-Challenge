@@ -9,7 +9,7 @@ router.post('/', async (req, res) => {
  // TODO: GET weather data from city name
  // TODO: save city to search history
 
-  console.log(`{req.method} request received to retrieve weather data`);
+  console.log(`${req.method} request received to retrieve weather data`);
   
   const cityName = req.body.city;
   
@@ -22,10 +22,8 @@ router.post('/', async (req, res) => {
     }catch(error){
       res.status(500).send('Unable to retrieve weather data');
     }
-  }//else{
-    //res.status(400).send('City name is required');
-  //}
-});
+  }
+  });
 
 // TODO: GET search history
 router.get('/history', async (req, res) => {
