@@ -49,19 +49,15 @@ class WeatherService {
 
   // TODO: Create fetchLocationData method
   private async fetchLocationData(query: string): Promise<any> {
-    this.city = query;
-    const url = this.buildGeocodeQuery();
-
-    try {
-      const response = await fetch(url);
+    try{
+      const response = await fetch(query);
       if (!response.ok){
         throw new Error(`fetching location data for ${response.status} not found`);
       }
       const locationData = await response.json();
-
       if(locationData.length === 0){
-        throw new Error(` Location data not found for ${this.city}`);
-      } else{
+        throw new Error(`Location data not found for ${this.city}`);
+      }else{
         this.city = locationData[0].name;
       }
       return locationData;
@@ -78,38 +74,61 @@ class WeatherService {
       throw new Error('Coordinates not found');
     }
     return {lat, lon};
- };
+ }
 
   // TODO: Create buildGeocodeQuery method
    private buildGeocodeQuery(): string { 
-  
-  const queryLimit = 1;
-    let query = `${this.baseURL}/geo/1.0/direct?q=${encodeURIComponent(this.city)}$limit=${queryLimit}&appid=${this.apiKey}`;
+    const queryLimit = 1;
+    let query = `${this.baseURL}/geo/1.0/direct?q=${encodeURIComponent(this.city)}&limit=${queryLimit}&appid=${this.apiKey}`;
+    if(! this.isValidUrl(query)){
+      throw new Error('buildGeocodeQuery(): Invalid URL');
+    }
     return query;
    }
+   private isValidUrl = (urlString: string): boolean => {
+    try{
+      new URL(urlString);
+      return true;
+    }catch(error){
+      return false;
+    }
+   };
   
    // TODO: Create buildWeatherQuery method
   private buildWeatherQuery(coordinates: Coordinates): string {
-    let query = `${this.baseURL}/data/2.5/forecast?units=imperial&lat=${coordinates.lat}&appid=${this.apiKey}`;
-   return query;
+    let query = `${this.baseURL}/data/2.5/forecast?units=imperial&lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${this.apiKey}`;
+   //return query;
+   if(! this.isValidUrl(query)){
+    throw new Error('buildWeatherQuery(): Invalid URL');
+   }
+    return query;
   }
 
   // TODO: Create fetchAndDestructureLocationData method
-   private async fetchAndDestructureLocationData(query:string):Promise<Coordinates> {
-    const locationData = await this.fetchLocationData(query);
-    return this.destructureLocationData(locationData);
+   private async fetchAndDestructureLocationData():Promise<Coordinates> {
+    const queryLocation = this.buildGeocodeQuery();
+    const locationData = await this.fetchLocationData(queryLocation);
+    const coordinates: Coordinates = this.destructureLocationData(locationData);
+    return coordinates;
    }
 
   // TODO: Create fetchWeatherData method
   private async fetchWeatherData(coordinates: Coordinates): Promise<any> {
-    const url = this.buildWeatherQuery(coordinates);
-    const response = await fetch(url);
-
-    if (!response.ok){
-      throw new Error('Weather data not found');
+    const query = this.buildWeatherQuery(coordinates);
+    try {
+      const response = await fetch(query);
+      if(!response.ok){
+        throw new Error(`Failed for fetching weather forecast data: ${response.statusText}`);
+      }
+      const weatherData = await response.json();
+      if(weatherData.length === 0){
+        throw new Error('Weather data not found');
+      }
+      return weatherData;
+    } catch(error){
+      console.error(error);
+      throw error;
     }
-    const data = await response.json();
-    return data;
   }
 
   // TODO: Build parseCurrentWeather method
@@ -143,7 +162,7 @@ class WeatherService {
     const forecast:{[key: string]: Weather} = {};
 
     weatherData.forEach((data: any) => {
-      const uniqueDate = data.dt_txt.split('')[0];
+      const uniqueDate = data.dt_txt.split("")[0];
       if(! forecast[uniqueDate]){
         forecast[uniqueDate] = this.parseCurrentWeather(data);
       }
@@ -155,10 +174,10 @@ class WeatherService {
    async getWeatherForCity(city: string): Promise<Weather[]> {
     console.log(`Getting weather data for ${city}`);
     this.city = city;
-    const coordinates = await this.fetchAndDestructureLocationData(city);
+    const coordinates = await this.fetchAndDestructureLocationData();
     const weatherData = await this.fetchWeatherData(coordinates);
-    const weatherArray = this.buildForecastArray(weatherData.list);
-    return weatherArray;
+    const weatherDay = this.buildForecastArray(weatherData.list);
+    return weatherDay;
    }
 }
 
