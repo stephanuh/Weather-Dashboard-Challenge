@@ -1,4 +1,5 @@
-.DS_Store
+# Project specific data file
+searchHistory.json
 
 # Logs
 logs
@@ -127,3 +128,5 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+

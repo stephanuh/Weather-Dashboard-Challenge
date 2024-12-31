@@ -3,8 +3,8 @@ dotenv.config();
 
 // TODO: Define an interface for the Coordinates object
 interface Coordinates {
-  lat: number;
-  lon: number;
+  lat: string;
+  lon: string;
 };
 // TODO: Define a class for the Weather object
 class Weather {
@@ -12,7 +12,7 @@ class Weather {
   date: string;
   icon: string;
   description: string;
-  temperature: number;
+  tempF: number;
   humidity: number;
   windSpeed: number;
   
@@ -21,7 +21,7 @@ class Weather {
     date: string,
     icon: string,
     description: string,
-    temperature: number,
+    tempF: number,
     humidity: number,
     windSpeed: number,
     
@@ -30,7 +30,7 @@ class Weather {
     this.date = date;
     this.icon = icon;
     this.description = description;
-    this.temperature = temperature;
+    this.tempF = tempF;
     this.humidity = humidity;
     this.windSpeed = windSpeed;
   }
@@ -134,20 +134,22 @@ class WeatherService {
   // TODO: Build parseCurrentWeather method
   private parseCurrentWeather(response: any):Weather {
     const { dt_txt, weather, main, wind} = response;
+
     const date = this.convertDate(dt_txt);
     const icon = weather[0].icon;
     const description = weather[0].description;
-    const temperature = main.temp;
+    const tempF = main.temp;
     const humidity = main.humidity;
+    const windSpeed = wind.speed;
 
     let  weatherReading = new Weather(
       this.city,
       date,
       icon,
       description,
-      temperature,
+      tempF,
       humidity,
-      wind.speed
+      windSpeed
     );
     return weatherReading;
   }
@@ -172,12 +174,12 @@ class WeatherService {
 
   // TODO: Complete getWeatherForCity method
    async getWeatherForCity(city: string): Promise<Weather[]> {
-    console.log(`Getting weather data for ${city}`);
+    console.info(`Getting weather data for ${city}`);
     this.city = city;
     const coordinates = await this.fetchAndDestructureLocationData();
     const weatherData = await this.fetchWeatherData(coordinates);
-    const weatherDay = this.buildForecastArray(weatherData.list);
-    return weatherDay;
+    const wd = this.buildForecastArray(weatherData.list);
+    return wd;
    }
 }
 
