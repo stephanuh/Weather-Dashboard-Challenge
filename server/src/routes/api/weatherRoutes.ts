@@ -9,7 +9,7 @@ router.post('/', async (req: Request, res:Response) => {
  // TODO: GET weather data from city name
  // TODO: save city to search history
 
-  console.info(`${req.method} request received for weather data`);
+  console.info(`${req.method} request received`);
   
   const cityName = req.body.cityName;
   
@@ -31,8 +31,8 @@ router.post('/', async (req: Request, res:Response) => {
 router.get('/history', async (req: Request, res: Response) => {
   console.info(`${req.method} request received for search history`);
   try{
-    const history = await HistoryService.getCities();
-    res.status(200).json(history);
+    const historyData = await HistoryService.getCities();
+    res.status(200).json(historyData);
   } catch(error){
     res.status(500).send('Unable to retrieve search history');
   }

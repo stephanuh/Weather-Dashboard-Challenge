@@ -11,7 +11,7 @@ class Weather {
   city: string;
   date: string;
   icon: string;
-  description: string;
+  iconDescription: string;
   tempF: number;
   humidity: number;
   windSpeed: number;
@@ -20,7 +20,7 @@ class Weather {
     city: string,
     date: string,
     icon: string,
-    description: string,
+    iconDescription: string,
     tempF: number,
     humidity: number,
     windSpeed: number,
@@ -29,7 +29,7 @@ class Weather {
     this.city = city;
     this.date = date;
     this.icon = icon;
-    this.description = description;
+    this.iconDescription = iconDescription;
     this.tempF = tempF;
     this.humidity = humidity;
     this.windSpeed = windSpeed;
@@ -40,7 +40,7 @@ class WeatherService {
   // TODO: Define the baseURL, API key, and city name properties
   private city: string = '';
   private baseURL: string;
-   private apiKey: string;
+  private apiKey: string;
 
    constructor() {
     this.baseURL = process.env.API_BASE_URL || '';
@@ -52,7 +52,7 @@ class WeatherService {
     try{
       const response = await fetch(query);
       if (!response.ok){
-        throw new Error(`fetching location data for ${response.status} not found`);
+        throw new Error(`fetching location data for ${response.statusText} not found`);
       }
       const locationData = await response.json();
       if(locationData.length === 0){
@@ -97,7 +97,7 @@ class WeatherService {
    // TODO: Create buildWeatherQuery method
   private buildWeatherQuery(coordinates: Coordinates): string {
     let query = `${this.baseURL}/data/2.5/forecast?units=imperial&lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${this.apiKey}`;
-   //return query;
+   
    if(! this.isValidUrl(query)){
     throw new Error('buildWeatherQuery(): Invalid URL');
    }
@@ -137,7 +137,7 @@ class WeatherService {
 
     const date = this.convertDate(dt_txt);
     const icon = weather[0].icon;
-    const description = weather[0].description;
+    const iconDescription = weather[0].description;
     const tempF = main.temp;
     const humidity = main.humidity;
     const windSpeed = wind.speed;
@@ -146,7 +146,7 @@ class WeatherService {
       this.city,
       date,
       icon,
-      description,
+      iconDescription,
       tempF,
       humidity,
       windSpeed
@@ -154,27 +154,27 @@ class WeatherService {
     return weatherReading;
   }
   private convertDate(fullDate: string){
-    const data = new Date(fullDate);
+    const date = new Date(fullDate);
     const formatter = new Intl.DateTimeFormat('en-US',{day:'2-digit', month:'2-digit', year:'numeric'});
-    return formatter.format(data);
+    return formatter.format(date);
   }
 
   // TODO: Complete buildForecastArray method
    private buildForecastArray(weatherData: any[]): Weather[] {
-    const forecast:{[key: string]: Weather} = {};
+    const dailyForecasts:{ [key: string]: Weather} = {};
 
     weatherData.forEach((data: any) => {
-      const uniqueDate = data.dt_txt.split("")[0];
-      if(! forecast[uniqueDate]){
-        forecast[uniqueDate] = this.parseCurrentWeather(data);
+      const date = data.dt_txt.split("")[0];
+      if(! dailyForecasts[date]){
+        dailyForecasts[date] = this.parseCurrentWeather(data);
       }
     });
-    return Object.values(forecast);
+    return Object.values(dailyForecasts);
   }
 
   // TODO: Complete getWeatherForCity method
    async getWeatherForCity(city: string): Promise<Weather[]> {
-    console.info(`Getting weather data for ${city}`);
+    console.info(`${this.getWeatherForCity.name} look up ${city}`);
     this.city = city;
     const coordinates = await this.fetchAndDestructureLocationData();
     const weatherData = await this.fetchWeatherData(coordinates);
