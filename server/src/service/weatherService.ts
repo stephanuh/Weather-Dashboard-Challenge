@@ -164,8 +164,8 @@ class WeatherService {
     const dailyForecasts:{ [key: string]: Weather} = {};
 
     weatherData.forEach((data: any) => {
-      const date = data.dt_txt.split("")[0];
-      if(! dailyForecasts[date]){
+      const date = data.dt_txt.split(" ")[0];
+      if (!dailyForecasts[date]){
         dailyForecasts[date] = this.parseCurrentWeather(data);
       }
     });
@@ -176,6 +176,7 @@ class WeatherService {
    async getWeatherForCity(city: string): Promise<Weather[]> {
     console.info(`${this.getWeatherForCity.name} look up ${city}`);
     this.city = city;
+
     const coordinates = await this.fetchAndDestructureLocationData();
     const weatherData = await this.fetchWeatherData(coordinates);
     const wd = this.buildForecastArray(weatherData.list);
