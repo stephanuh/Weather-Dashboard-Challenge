@@ -25,9 +25,15 @@ create a ```.env``` file in the root directory with following variables:
 
 3) View current weather and 5-day forecast for the selected city.
 
-4) check the search history to revisit previosly searched cities.
+4) Check the search history to revisit previosly searched cities.
 
-5) you can deleted your city history.
+5) You can deleted your city history.
+
+>Click [weather-Dashboard](https://weather-dashboard-challenge-52kv.onrender.com) to visit the site!!
+
+![screenshot](picture/Weather-Dashboard.PNG)
+
+
 
 
 ## Credits
